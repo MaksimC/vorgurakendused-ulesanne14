@@ -162,8 +162,57 @@ function hangi_loom($id){
     }
 
 }
+/*
+function muuda(){
+    // check if a user is logged on
+    if (empty($_SESSION["user"])){
+        header("Location: ?page=login");
+    }
+    // check if logged user is admin
+    if ($_SESSION["role"]!=="admin"){
+        header("Location: ?page=loomaaed.php");
+    }
+
+    //echo("ID from GET array is ".$_GET["id"]."\n");
+    if ($_POST) {
+        global $connection;
+        $errors=array();
+
+        if(empty($_POST["nimi"])) {
+            $errors[]="looma nimi puudu!";
+        }
+
+        if(empty($_POST["puur"])) {
+            $errors[]="puurinr puudu!";
+        }
+
+        if (empty($errors)) {
+            $id = mysqli_real_escape_string($connection, $_POST["id"]);
+            $name = mysqli_real_escape_string($connection, $_POST["nimi"]);
+            $cage = mysqli_real_escape_string($connection, $_POST["puur"]);
+            $query = "UPDATE loomaaed_mtseljab SET nimi =\"".$name."\" , puur=".$cage." WHERE id=".$id;
+            $result = mysqli_query($connection, $query);
+            $id = mysqli_insert_id($connection);
+            if ($id){
+                header("Location: ?page=loomad");
+            } else {
+                header("Location: ?page=muuda");
+            }
+            exit(0);
+        }
+    } else {
+        $id = $_GET["id"];
+        $loom = hangi_loom($id);
+        var_dump($loom);
+    }
+
+    include_once('views/editvorm.html');
+}
+*/
 
 function muuda(){
+    error_reporting(E_ALL & ~E_NOTICE);
+
     // check if a user is logged on
     if (empty($_SESSION["user"])){
         header("Location: ?page=login");
@@ -177,7 +226,6 @@ function muuda(){
     if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $id = $_GET["id"];
         $loom = hangi_loom($id);
-        var_dump($loom);
 
     } else if ($_SERVER["REQUEST_METHOD"] == "POST"){
         global $connection;
