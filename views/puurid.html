@@ -1,7 +1,7 @@
 <?php
     echo ("<pre>");
-    //var_dump($puurid);
-    echo ("</pre>");
+//var_dump($puurid);
+echo ("</pre>");
 ?>
 
 <!--Puurid = [2->[0->[id->1;nimi->Kassper;puur->2;liik->pildid.cat.png]; 1->[id->3; nimi-> Kassper; puur->2; liik pildid.cat.jpg] etc  ]-->
@@ -10,7 +10,10 @@
 <div class="puur">
     <h3>Puur nr <?php echo $puuriNr; ?></h3>
     <?php foreach($puur as $loomaNimi=>$loom): ?>
-    <img src="<?php echo $loom['liik']; ?>" alt="<?php echo $loom['nimi']; ?>" title="<?php echo $loom['nimi']; ?>">
+        <?php if($_SESSION['role'] == "admin"): ?>
+            <p><a href = "?page=muuda&id=<?php echo $loom['id']; ?>">Muuda</a></p>
+        <?php endif; ?>
+        <img src="<?php echo $loom['liik']; ?>" alt="<?php echo $loom['nimi']; ?>" title="<?php echo $loom['nimi']; ?>">
     <?php endforeach; ?>
 </div>
 <?php endforeach; ?>

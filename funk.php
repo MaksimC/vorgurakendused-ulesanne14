@@ -105,7 +105,7 @@ function lisa(){
                 $puur = mysqli_real_escape_string ($connection, $_POST["puur"]);
                 $liik = mysqli_real_escape_string ($connection, "pildid/".$_FILES["liik"]["name"]);
                 $query = "INSERT INTO loomaaed_mtseljab (nimi, puur, liik) VALUES ('$nimi','$puur','$liik')";
-                $result = mysqli_query($connection, $query);
+                $result = mysqli_query($connection, $query) or die ("$query - ".mysqli_error($connection));
                 $row = mysqli_insert_id($connection);
                 if ($row){
                     header("Location: ?page=loomad");
@@ -147,6 +147,69 @@ function upload($name){
     } else {
         return "";
     }
+}
+
+function hangi_loom($id){
+    global $connection;
+
+    $query = "SELECT id, nimi, puur, liik FROM loomaaed_mtseljab where ID= '".$id."' " ;
+    $result = mysqli_query($connection, $query)or die("$query - ".mysqli_error($connection));;
+    if ($result){
+        $loom = mysqli_fetch_assoc($result);
+        return $loom;
+    } else {
+        header("Location: ?page=loomaaed.php");
+    }
+
+}
+
+function muuda(){
+    // check if a user is logged on
+    if (empty($_SESSION["user"])){
+        header("Location: ?page=login");
+    }
+    // check if logged user is admin
+    if ($_SESSION["role"]!=="admin"){
+        header("Location: ?page=loomaaed.php");
+    }
+
+    echo("ID from GET array is ".$_GET["id"]."\n");
+    if ($_SERVER["REQUEST_METHOD"] == "GET"){
+        $id = $_GET["id"];
+        $loom = hangi_loom($id);
+        var_dump($loom);
+
+    } else if ($_SERVER["REQUEST_METHOD"] == "POST"){
+        global $connection;
+        $errors=array();
+
+        if(empty($_POST["nimi"])) {
+            $errors[]="looma nimi puudu!";
+        }
+
+        if(empty($_POST["puur"])) {
+            $errors[]="puurinr puudu!";
+        }
+
+        if (empty($errors)) {
+            $id = mysqli_real_escape_string($connection, $_POST["id"]);
+            $name = mysqli_real_escape_string($connection, $_POST["nimi"]);
+            $cage = mysqli_real_escape_string($connection, $_POST["puur"]);
+            $query = "UPDATE loomaaed_mtseljab SET nimi =\"".$name."\" , puur=".$cage." WHERE id=".$id;
+            $result = mysqli_query($connection, $query);
+            $id = mysqli_insert_id($connection);
+            if ($id){
+                header("Location: ?page=loomad");
+            } else {
+                header("Location: ?page=muuda");
+            }
+            exit(0);
+        }
+    } else {
+        header("Location: ?page=loomad");
+    }
+
+    include_once('views/editvorm.html');
 }
 
 ?>

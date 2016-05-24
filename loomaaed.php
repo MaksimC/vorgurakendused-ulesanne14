@@ -23,6 +23,9 @@ switch($page){
 	case "lisa":
 		lisa();
 	break;
+	case "muuda":
+		muuda();
+		break;
 	default:
 		include_once('views/v2rav.html');
 	break;
