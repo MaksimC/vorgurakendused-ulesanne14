@@ -222,7 +222,7 @@ function muuda(){
         header("Location: ?page=loomaaed.php");
     }
 
-    echo("ID from GET array is ".$_GET["id"]."\n");
+    //echo("ID from GET array is ".$_GET["id"]."\n");
     if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $id = $_GET["id"];
         $loom = hangi_loom($id);
